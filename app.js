@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const router = express.Router();
+const db = require('./database/db')
 
 app.set('view enginer', 'ejs')
 app.set('views', path.join(__dirname, 'views')); // Define o diretório de views
@@ -49,7 +50,7 @@ app.use('/', login)
 
 
 const porta = process.env.PORT
-app.listen(porta || 3000, (erro)=>{
+app.listen(porta || 3001, (erro)=>{
     if(erro){
         console.log('Erro ao conectar na porta')
     }
