@@ -1,0 +1,36 @@
+{
+  "name": "sistemaestoque",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "fast-csv": "^5.0.2",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.5",
+    "nodemailer": "^6.9.16",
+    "nodemon": "^3.1.7",
+    "pdf-parser": "^1.0.5",
+    "pdfkit": "^0.15.1",
+    "remixicon": "^4.5.0",
+    "shelljs": "^0.8.5",
+    "socket.io": "^4.8.1",
+    "sweetalert2": "^11.14.5"
+  }
+}
