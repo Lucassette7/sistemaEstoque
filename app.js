@@ -27,7 +27,10 @@ app.use(cors());
 
 
 
-
+//rotas 
+//login
+const login = require('./routes/login')
+app.use('/', login)
 
 
 
