@@ -16,12 +16,12 @@
                 <!-- Email Field -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Digite seu email" required>
+                    <input type="email" class="form-control" id="email1" placeholder="Digite seu email" required>
                 </div>
                 <!-- Senha Field -->
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="senha" placeholder="Digite sua senha" required>
+                    <input type="password" class="form-control" id="senha1" placeholder="Digite sua senha" required>
                 </div>
                 <!-- Login Button -->
                 <button type="submit" class="btn btn-login w-100">Entrar</button>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Email</span>
-                    <input type="email" id="email" placeholder="Digite o email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    <input type="email" id="email2" placeholder="Digite o email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                 </div>
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Cnpj</span>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Senha</span>
-                    <input type="password" id="senha" placeholder="Cadastre uma senha" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    <input type="password" id="senha2" placeholder="Cadastre uma senha" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                 </div>
             </div>
             <div class="modal-footer">
@@ -79,21 +79,31 @@
 <script>
     function abrirModal(){
       // Abre o modal com o ID 'myModal'
-      var modal = new bootstrap.Modal(document.getElementById('myModal'));
-      modal.show();
+        var modal = new bootstrap.Modal(document.getElementById('myModal'));
+        modal.show();
     }
 
     function cadastrar(){
         const nome = $("#nome").val()
         const telefone = $("#telefone").val()
-        const email = $("#email").val()
+        const email = $("#email2").val()
         const cnpj = $("#cnpj").val()
-        const senha = $("#senha").val()
-        alert(nome)
-        alert(telefone)
-        alert(email)
-        alert(cnpj)
-        alert(senha)
+        const senha = $("#senha2").val()
+        const body = {nome, telefone, email, cnpj, senha}
+
+        $.ajax({
+            url: '/salvarCadastro',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(body)
+        }).done((response)=>{
+            if(response.success){
+                alert('inserido com sucesso')
+            }
+            else{
+                alert('Erro ao inserir')
+            }
+        })
     }
 </script>
 </html>
