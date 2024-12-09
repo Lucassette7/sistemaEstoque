@@ -58,7 +58,7 @@
 
 
             <!-- Botão para Adicionar Novo Produto -->
-            <a href="/cadastro-produto" class="btn btn-primary">Adicionar Produto</a>
+            <button class="btn btn-primary" onclick="adicionaProduto()">Adicionar Produto</button> 
         </div>
     </div>
 </body>
@@ -145,7 +145,47 @@ function populaCategoria(){
 }
 
 //SALVA PRODUTO
+function adicionaProduto(){
+    const categoria = $("#categoria2").val()
+    const marca = $("#marca").val()
+    const produto = $("#produto").val()
+    const cor = $("#cor").val()
+    const valor = $("#valor").val()
+    const descricao = $("#descricao").val()
+    const id_empresa = sessionStorage.getItem('id_empresa')
 
+    const body = {categoria, marca, produto, cor, valor, descricao}
+
+    $.ajax({
+        url: `/adicionaProduto/${id_empresa}`,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(body)
+    }).done((response)=>{
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Adicionado com sucesso',
+                timer: 1500
+            })
+            document.getElementById("categoria2").value = ''
+            document.getElementById("marca").value = ''
+            document.getElementById("produto").value = ''
+            document.getElementById("cor").value = ''
+            document.getElementById("valor").value = ''
+            document.getElementById("descricao").value = ''
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao inserir produto',
+                timer: 1500
+            })
+        }
+    })
+}
 
 
 $(document).ready(function(){
