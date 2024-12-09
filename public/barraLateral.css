@@ -12,11 +12,12 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #333;
+    background: linear-gradient(to bottom, #2196F3, #09366a);  /* Degradê de cinza escuro para um tom mais claro */
     padding-top: 20px;
     color: white;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.3);
 }
+
 
 /* Estilo dos links na barra lateral */
 .sidebar a {
@@ -29,7 +30,8 @@
 }
 
 .sidebar a:hover {
-    background-color: #575757;
+    background-color: #ffffff;
+    color: black;
 }
 
 /* Estilo do conteúdo principal da página */

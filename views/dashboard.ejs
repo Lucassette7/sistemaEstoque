@@ -1,9 +1,104 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <title>Dashboard</title>
 <%-include('partials/header')%>
+
 <body>
-<%-include('partials/barraLateral')%>
-<div>oi</div>
+
+    
+    <div class="dashboard-container">
+        <%-include('partials/barraLateral')%>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Visão Geral do Estoque</h1>
+            </div>
+            
+            
+            <!-- Cards de Resumo -->
+            <div class="cards" >
+                <div class="card" >
+                    <h3>Total de Produtos</h3>
+                    <p id="total-products">150</p>
+                </div>
+                <div class="card">
+                    <h3>Produtos Vendidos</h3>
+                    <p id="sold-products">120</p>
+                </div>
+                <div class="card">
+                    <h3>Produtos em Falta</h3>
+                    <p id="out-of-stock">30</p>
+                </div>
+            </div>
+            
+            <!-- Gráficos -->
+            <div class="charts">
+                <div class="chart-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // script.js
+
+// Gráfico de Estoque
+const ctxStock = document.getElementById('stockChart').getContext('2d');
+const stockChart = new Chart(ctxStock, {
+    type: 'bar',
+    data: {
+        labels: ['Produto A', 'Produto B', 'Produto C', 'Produto D'],
+        datasets: [{
+            label: 'Estoque Atual',
+            data: [30, 45, 60, 25],  // Quantidade de estoque
+            backgroundColor: 'rgba(33, 150, 243, 0.6)',
+            borderColor: '#2196F3',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Gráfico de Vendas
+const ctxSales = document.getElementById('salesChart').getContext('2d');
+const salesChart = new Chart(ctxSales, {
+    type: 'line',
+    data: {
+        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+        datasets: [{
+            label: 'Vendas Realizadas',
+            data: [200, 300, 250, 450],  // Vendas ao longo do tempo
+            borderColor: '#FF9800',
+            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+            borderWidth: 2,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+    </script>
 </body>
+
 </html>

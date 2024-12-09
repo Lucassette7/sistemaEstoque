@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<title>Produtos</title>
+<%-include('partials/header')%>
+<body>
+    <div class="container">
+        <%-include('partials/barraLateral')%> <!-- Inclui a barra lateral -->
+
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <h1>Lista de Produtos</h1>
+            <button class="btn btn-primary" id="abreModal" onclick="abreModal()">Cadastrar categoria</button>
+            <hr>
+            <!-- Barra de Pesquisa -->
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">CATEGORIA</span>
+                <select name="categoria" id="categoria2" class="form-control"></select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">MARCA</span>
+                <input type="text" class="form-control" id="marca" placeholder="Digite a marca">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">PRODUTO</span>
+                <input type="text" class="form-control" id="produto" placeholder="Digite o nome do produto" >
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">COR</span>
+                <input type="text" class="form-control" id="cor" placeholder="Digite a cor" >
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">VALOR</span>
+                <input type="text" class="form-control" id="valor" placeholder="Digite o valor" >
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 12%;">DESCRIÇÃO</span>
+                <input type="text" class="form-control" id="descricao" placeholder="Descreva o produto" >
+            </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalCategoriaLabel">Adicionar Categoria</h5>
+                                
+                            </div>
+                            <div class="modal-body">
+                                <label for="categoria">Categoria</label>
+                                <input type="text" id="categoria1" class="form-control" placeholder="Nome da categoria">
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+                                <button class="btn btn-primary" onclick="salvarCategoria()">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            <!-- Botão para Adicionar Novo Produto -->
+            <a href="/cadastro-produto" class="btn btn-primary">Adicionar Produto</a>
+        </div>
+    </div>
+</body>
+<script>
+
+
+
+//ABRE MODAL
+function abreModal() {
+    const modal = new bootstrap.Modal(document.getElementById('modalCategoria'));
+    modal.show();  // Exibe o modal
+}
+
+//SALVA CATEGORIOA
+function salvarCategoria(){
+    const categoria = $("#categoria1").val()
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    
+
+    $.ajax({
+        url: `/cadastraCategoria/${categoria}/${id_empresa}`,
+        method: 'POST',
+        contentType: 'application/json'
+    }).done((response)=>{
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Cadastrado com sucesso',
+                timer: 1500
+            }).then(()=>{
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalCategoria'))
+                modal.hide()
+                location.reload() //atualiza pagina automaticamente
+            })
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao cadastrar',
+                timer: 1500
+            })
+        }
+    })
+}
+//FECHA MODAL
+function closeModal(){
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalCategoria'))
+    modal.hide()
+    
+}
+    
+
+//POPULA CATEGORIA
+function populaCategoria(){
+    const id_empresa = sessionStorage.getItem('id_empresa');
+    $.ajax({
+        url: `/populaCategoria/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response) => {
+        if(response){
+            const categoriaSelect = document.getElementById('categoria2');
+            categoriaSelect.innerHTML = ''; // Limpar as opções existentes
+
+            // Adiciona a opção padrão
+            const optionDefault = document.createElement('option');
+            optionDefault.value = '';
+            optionDefault.textContent = 'Selecione uma categoria';
+            categoriaSelect.appendChild(optionDefault);
+
+            // Itera sobre os dados da resposta e adiciona opções ao select
+            response.forEach(dados => {
+                const option = document.createElement('option')
+                option.value = dados.categoria;  // Usando a propriedade 'categoria' do objeto
+                option.textContent = dados.categoria;  // Usando a propriedade 'categoria' para o texto da opção
+                categoriaSelect.appendChild(option);  // Adiciona a opção ao select
+            });
+        }
+    }).fail((error) => {
+        console.error('Erro ao realizar a requisição:', error);
+    });
+}
+
+//SALVA PRODUTO
+
+
+
+$(document).ready(function(){
+    populaCategoria()
+})
+
+</script>
+</html>

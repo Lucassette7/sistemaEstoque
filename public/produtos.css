@@ -1,0 +1,93 @@
+body {
+    background-color: #f4f7fc;
+    font-family: Arial, sans-serif;
+    font-size: 16px;  /* Aumenta o tamanho da fonte para leitura mais confortável */
+    line-height: 1.5;
+    padding: 30px;  /* Adiciona espaçamento em volta da tela */
+}
+
+.card {
+    margin-top: 50px;
+    border-radius: 12px; /* Aumenta o arredondamento da borda para uma aparência mais suave */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra mais pronunciada */
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 12px 12px 0 0;  /* Aumenta o arredondamento do cabeçalho */
+    padding: 20px;  /* Aumenta o espaçamento dentro do cabeçalho */
+    font-size: 22px;  /* Aumenta o tamanho da fonte no cabeçalho */
+}
+
+.card-body {
+    padding: 30px;  /* Aumenta o padding dentro do card */
+}
+
+.form-label {
+    font-weight: bold;
+    font-size: 18px;  /* Aumenta o tamanho da fonte nas labels */
+}
+
+.form-control {
+    border-radius: 12px;  /* Aumenta o arredondamento dos campos de entrada */
+    padding: 12px 15px;  /* Aumenta o padding dentro dos campos de entrada */
+    font-size: 16px;  /* Aumenta o tamanho da fonte nos campos de entrada */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;  /* Aumenta o tamanho do botão */
+    font-size: 18px;  /* Aumenta o tamanho da fonte do botão */
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+textarea {
+    border-radius: 12px;
+    padding: 15px;  /* Aumenta o padding do campo de texto */
+    font-size: 16px;  /* Aumenta o tamanho da fonte no textarea */
+    min-height: 120px;
+}
+
+select {
+    border-radius: 12px;
+    padding: 12px 15px;  /* Aumenta o padding dentro do select */
+    font-size: 16px;  /* Aumenta o tamanho da fonte no select */
+}
+
+/* Ajustes para responsividade em telas pequenas */
+@media (max-width: 767px) {
+    .card {
+        margin-top: 20px;
+    }
+
+    .form-control,
+    button,
+    textarea,
+    select {
+        font-size: 18px; /* Aumenta o tamanho da fonte para telas menores */
+    }
+
+    .card-body {
+        padding: 20px;  /* Reduz o padding em telas menores */
+    }
+}

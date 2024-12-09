@@ -40,6 +40,10 @@ app.use('/', login)
 const dashboard = require('./routes/dashboard')
 app.use(dashboard)
 
+//produtos
+const produtos = require('./routes/produtos')
+app.use(produtos)
+
 
 
 

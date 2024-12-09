@@ -135,6 +135,17 @@
                     title: 'Seja bem vindo',
                     timer: 1500
                 }).then(()=>{
+                    $.ajax({
+                        url: `/id_empresa/${email}`,
+                        method: 'GET',
+                        contentType: 'application/json'
+                    }).then((resposta)=>{
+                        if(resposta){
+                            const id = resposta[0].id_empresa
+                            sessionStorage.setItem('id_empresa', id)
+                        }
+                    })
+                    sessionStorage.setItem('email', email)
                     window.location.href = '/dashboard'
                 })
             }
@@ -147,8 +158,6 @@
                 })
             }
         })
-
-
     }
 </script>
 </html>

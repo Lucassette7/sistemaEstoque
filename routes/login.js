@@ -28,9 +28,9 @@ router.post('/salvarCadastro', (req, res)=>{
 
 router.post('/logar', (req, res) => {
     const { email, senha } = req.body;
-    console.log(email);  // Verifique o valor de 'email'
+    
 
-    const query = 'SELECT email, senha FROM empresa WHERE email = ? AND senha = ?';
+    const query = 'SELECT email, id_empresa, senha FROM empresa WHERE email = ? AND senha = ?';
 
     db.query(query, [email, senha], (erro, results) => {
         if (erro) {
@@ -44,4 +44,26 @@ router.post('/logar', (req, res) => {
         }
     });
 });
+
+//COLETA ID EMPRESA PARA TRANSFORMAR EM SESSION
+router.get('/id_empresa/:email', (req, res)=>{
+    const email = req.params.email
+    
+
+    const query = 'SELECT id_empresa FROM empresa WHERE email = ?'
+
+    db.query(query, [email], (erro, results)=>{
+        if(erro){
+            return res.json('erro')
+        }
+        if(results.length > 0){
+            return res.json(results)
+        }
+    })
+
+
+
+})
+
+
 module.exports = router

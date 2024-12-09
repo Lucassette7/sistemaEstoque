@@ -11,15 +11,30 @@
 
     <!-- Barra lateral -->
     <div class="sidebar">
-        <a href="#">DASHBOARD</a>
-        <a href="#">ESTOQUE</a>
+        <!-- Div com a imagem -->
+        <div style="width: 100%; height: 100px;">  <!-- A altura aqui pode ser alterada -->
+            <img src="logo_icone/7 Sy.jpg" alt="SevenSystem" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    
+        <!-- Links de navegação -->
+        <div>
+            <a href="/dashboard">DASHBOARD <i class="ri-pie-chart-2-line"></i></a>
+            <a href="/categoria">CATEGORIA <i class="ri-file-list-line"></i></a>
+            <a href="/produtos">PRODUTOS <i class="ri-shopping-bag-3-fill"></i></a>
+            <a href="#">COMPRAS <i class="ri-shopping-cart-line"></i></a>
+            <a href="#">VENDAS <i class="ri-coins-line"></i></a>
+            <a href="#">FORNECEDORES <i class="ri-truck-line"></i></a>
+            <a href="#">CONFIGURAÇÃO <i class="ri-tools-fill"></i></a>
+            <a onclick="sair()" href="#">SAIR <i class="ri-door-open-line"></i></a>
+            <br>
+        </div>
     </div>
-
-    <!-- Conteúdo principal -->
-    <div class="content">
-        <h1>Bem-vindo à página de administração</h1>
-        <p>Aqui você pode navegar pelo Dashboard e gerenciar o Estoque.</p>
-    </div>
+    
 
 </body>
+<script>
+    function sair(){
+        window.location.href = '/'
+    }
+</script>
 </html>
