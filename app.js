@@ -12,11 +12,10 @@ const socketIo = require('socket.io');
 const router = express.Router();
 const db = require('./database/db')
 
-app.set('view enginer', 'ejs')
+app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views')); // Define o diretório de views
 app.use(express.static('public')); // Serve arquivos estáticos da pasta 'public'
 app.use('/public', express.static(path.join(__dirname, 'public')));
-
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,11 +26,19 @@ app.use(cors());
 
 
 
+app.use(cookieParser());
+
+
+
 
 //rotas 
 //login
 const login = require('./routes/login')
 app.use('/', login)
+
+//dashboard
+const dashboard = require('./routes/dashboard')
+app.use(dashboard)
 
 
 
