@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabela de Fornecedores</title>
+
+
+<%- include('partials/header') %>
+<link rel="stylesheet" href="fornecedores.css">
+</head>
+
+<body>
+<!-- Barra Lateral -->
+<%- include('partials/barraLateral') %>
+
+<!-- Conteúdo Principal -->
+    <div class="container">
+        <h2 class="text-center">Fornecedores</h2>
+
+        <!-- Tabela -->
+        <table id="DataTable" class="table table-striped table-nowrap table-bordered align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>NOME</th>
+                    <th>EMAIL</th> 
+                    <th>TELEFONE</th>
+                    <th>AÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <hr>
+        <button class="btn btn-primary" id="cadastrar" onclick="abrirModal()">CADASTRAR FORNECEDORES</button>
+    </div>
+
+
+<div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"           aria-labelledby="staticBackdropLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">CADASTRO DE FORNECEDOR</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">NOME</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="nome">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">CNPJ</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="cnpj" maxlength="14">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">EMAIL</span>
+                        <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="email">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">FONE</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="fone" maxlength="11">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">CEP</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="cep" maxlength="8" onkeyup="preencheCEP()">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">ESTADO</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="estado">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">CIDADE</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="cidade">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">BAIRRO</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="bairro">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">RUA</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="rua">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 16%;">N°</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="numero">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Fechar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="salvarFornecedor()">Salvar</button>
+                    
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<script>
+
+function abrirModal(){
+      // Abre o modal com o ID 'myModal'
+        var modal = new bootstrap.Modal(document.getElementById('modal'));
+        modal.show();
+    }
+
+
+function preencheCEP(){
+    const cep = $("#cep").val()
+
+    if(cep.length === 8){
+        $.ajax({
+        url: `/dadosCep/${cep}`,
+        method: 'GET',
+        contentType: 'application/json'
+        }).then((response)=>{
+            if(response){
+                const rua = response.logradouro
+                const bairro = response.bairro
+                const cidade = response.localidade
+                const estado = response.estado
+
+                document.getElementById('rua').value = rua || 'Não encontrado'
+                document.getElementById('bairro').value = bairro || 'Não encontrado'
+                document.getElementById('cidade').value = cidade || 'Não encontrado'
+                document.getElementById('estado').value = estado || 'Não encontrado'
+            }
+        })
+    }
+}
+
+//funcao para salvar fornecedor
+function salvarFornecedor(){
+    const nome = $("#nome").val()
+    const cnpj = $("#cnpj").val()
+    const email = $("#email").val()
+    const fone = $("#fone").val()
+    const cep = $("#cep").val()
+    const estado = $("#estado").val()
+    const cidade = $("#cidade").val()
+    const bairro = $("#bairro").val()
+    const rua = $("#rua").val()
+    const numero = $("#numero").val()
+    const id_empresa = sessionStorage.getItem('id_empresa')
+
+    const body = {id_empresa ,nome, cnpj, email, fone, cep, estado, cidade, bairro, rua, numero}
+
+    $.ajax({
+        url: '/inserirFornecedor',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(body)
+    }).done((response)=>{
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Fornecedor inserido com sucesso',
+                timer: 1500
+            })
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao inserir o fornecedor',
+                timer: 1500
+            })
+        }
+    })
+    setTimeout(function(){
+        window.location.reload()
+    },2000)
+}
+
+
+//funcao para popular fornecedores
+$('#refreshButton').on('click', function() {
+            $('#DataTable').DataTable().ajax.reload();
+        });
+
+        // DataTable Contrato
+        $(document).ready(function() {
+            const id_empresa = sessionStorage.getItem('id_empresa')
+            $('#DataTable').DataTable({
+                processing: true,
+                serverSide: false,
+                searching: false,
+                info: true,
+                ordering: false,
+                pagingType: 'simple_numbers',
+                lengthChange: false,
+                autoWidth: false,
+                language: {
+                    sProcessing: "Processando...",
+                    sLengthMenu: "Exibir _MENU_ registros por página",
+                    sZeroRecords: "Nenhum resultado encontrado",
+                    sEmptyTable: "Nenhum resultado encontrado",
+                    sInfo: "Exibindo do _START_ até _END_ de um total de _TOTAL_ registros",
+                    sInfoEmpty: "Exibindo do 0 até 0 de um total de 0 registros",
+                    sInfoFiltered: "(Filtrado de um total de _MAX_ registros)",
+                    sSearch: "Buscar:",
+                    sLoadingRecords: "Carregando...",
+                    oPaginate: {
+                        sFirst: "Primeiro",
+                        sLast: "Último",
+                        sNext: "Próximo",
+                        sPrevious: "Anterior"
+                    },
+                    oAria: {
+                        sSortAscending: ": Ativar para ordenar a coluna de maneira ascendente",
+                        sSortDescending: ": Ativar para ordenar a coluna de maneira descendente"
+                    }
+                },
+                ajax: {
+                    url: `/dadosFornecedor/${id_empresa}`, // URL da nova rota para dados JSON
+                    dataSrc: 'data' // 'data' é a chave onde os dados estão na resposta JSON
+                },
+                columnDefs: [
+                    { width: "5%", targets: 0, className: 'text-center' }, // ID
+                    { width: "40%", targets: 1, className: 'text-left' }, // nome
+                    { width: "26%", targets: 2, className: 'text-left' }, // email
+                    { width: "20%", targets: 3, className: 'text-center' }, // telefone
+
+                ],
+                columns: [
+                    { data: 'id_fornecedor' },
+                    { data: 'nome' },
+                    { data: 'email' },
+                    { data: 'telefone' },
+
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                            <button class="btn btn-info btn-sm" onclick="editar(${data.id_fornecedor})"><i class="ri-printer-fill"></i></button>&nbsp;
+                            <button class="btn btn-success btn-sm" onclick="email(${data.id_fornecedor})"><i class="ri-pencil-line"></i></button>&nbsp;
+                           
+                            `;
+                        }
+                    }
+                ],
+                pageLength: 7
+            });
+        });
+
+    $(document).ready(function() {
+      $('#tabelaFornecedores').DataTable(); // Ativa o DataTable
+    });
+</script>
+</body>
+</html>

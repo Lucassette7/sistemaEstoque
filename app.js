@@ -38,25 +38,15 @@ app.use('/', login)
 
 //dashboard
 const dashboard = require('./routes/dashboard')
-app.use(dashboard)
+app.use('/', dashboard)
 
 //produtos
 const produtos = require('./routes/produtos')
-app.use(produtos)
+app.use('/', produtos)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//fornecedores
+const fornecedores = require('./routes/fornecedores')
+app.use('/', fornecedores)
 
 
 

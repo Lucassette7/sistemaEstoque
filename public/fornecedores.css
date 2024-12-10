@@ -1,0 +1,51 @@
+/* Barra lateral fixa à esquerda */
+#barraLateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+  /* Garantir que o conteúdo da página não sobreponha a barra lateral */
+.container {
+    margin-left: 210px; /* Espaço para a barra lateral */
+    padding: 50px;
+}
+
+  /* Estilizando a tabela */
+table {
+    width: 70%;
+    border-collapse: collapse;
+}
+
+  /* Estilo para as células da tabela */
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+  /* Estilo para as células de cabeçalho */
+table th {
+    background-color: #007bff;
+    color: white;
+}
+
+  /* Efeito de hover nas linhas da tabela */
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+  /* Título */
+h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
