@@ -7,32 +7,58 @@
 
         <!-- Conteúdo Principal -->
         <div class="main-content">
-            <h1>Lista de Produtos</h1>
+            <center><h1>CADASTRO DE PRODUTOS</h1></center>
             <button class="btn btn-primary" id="abreModal" onclick="abreModal()">Cadastrar categoria</button>
             <hr>
             <!-- Barra de Pesquisa -->
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">CATEGORIA</span>
+                <span class="input-group-text" style="width: 14%;">FORNECEDOR</span>
+                <select name="fornecedor" id="fornecedor" class="form-control">
+                    
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 14%;">CATEGORIA</span>
                 <select name="categoria" id="categoria2" class="form-control"></select>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">MARCA</span>
+                <span class="input-group-text" style="width: 14%;">MARCA</span>
                 <input type="text" class="form-control" id="marca" placeholder="Digite a marca">
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">PRODUTO</span>
+                <span class="input-group-text" style="width: 14%;">PRODUTO</span>
                 <input type="text" class="form-control" id="produto" placeholder="Digite o nome do produto" >
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">COR</span>
+                <span class="input-group-text" style="width: 14%;">COR</span>
                 <input type="text" class="form-control" id="cor" placeholder="Digite a cor" >
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">VALOR</span>
+                <span class="input-group-text" style="width: 14%;">VALOR</span>
                 <input type="text" class="form-control" id="valor" placeholder="Digite o valor" >
             </div>
+
             <div class="input-group mb-3">
-                <span class="input-group-text" style="width: 12%;">DESCRIÇÃO</span>
+                <span class="input-group-text" style="width: 14%;">MEDIDA</span>
+                <select class="form-select" id="medida" aria-label="Default select example">
+                    <option id="un" value="un">UN</option>
+                    <option id="m" value="m">M</option>
+                    <option id="cm" value="cm">CM</option>
+                    <option id="mm" value="mm">MM</option>
+                    <option id="km" value="km">KM</option>
+                    <option id="kg" value="kg">KG</option>
+                    <option id="g" value="g">G</option>
+                    <option id="mg" value="mg">MG</option>
+                    <option id="m2" value="m2">m²</option>
+                    <option id="cm2" value="cm2">cm²</option>
+                    <option id="km2" value="km2">km²</option>
+                    <option id="m3" value="m3">m³</option>
+                    <option id="l" value="l">L</option>
+                    <option id="ml" value="ml">ML</option>
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 14%;">DESCRIÇÃO</span>
                 <input type="text" class="form-control" id="descricao" placeholder="Descreva o produto" >
             </div>
 
@@ -58,7 +84,7 @@
 
 
             <!-- Botão para Adicionar Novo Produto -->
-            <button class="btn btn-primary" onclick="adicionaProduto()">Adicionar Produto</button> 
+            <button class="btn btn-primary" onclick="adicionaProduto()">Salvar</button> 
         </div>
     </div>
 </body>
@@ -146,15 +172,19 @@ function populaCategoria(){
 
 //SALVA PRODUTO
 function adicionaProduto(){
+    const id_fornecedor = $("#fornecedor").val()
     const categoria = $("#categoria2").val()
     const marca = $("#marca").val()
     const produto = $("#produto").val()
     const cor = $("#cor").val()
     const valor = $("#valor").val()
+    const medida = $("#medida").val()
     const descricao = $("#descricao").val()
     const id_empresa = sessionStorage.getItem('id_empresa')
+    
 
-    const body = {categoria, marca, produto, cor, valor, descricao}
+
+    const body = {id_fornecedor, categoria, marca, produto, cor, valor, medida, descricao}
 
     $.ajax({
         url: `/adicionaProduto/${id_empresa}`,
@@ -187,9 +217,39 @@ function adicionaProduto(){
     })
 }
 
+//popula fornecedor
+function populaFornecedor() {
+    const id_empresa = sessionStorage.getItem('id_empresa');
+
+    const fornecedorSelect = document.getElementById('fornecedor');
+
+    // Adiciona uma opção padrão "Fornecedores"
+    const criaOption = document.createElement('option');
+    criaOption.value = ''; // Pode ser um valor vazio ou outro valor como '0'
+    criaOption.textContent = 'Fornecedores';
+    fornecedorSelect.appendChild(criaOption);
+
+    $.ajax({
+        url: `/populaFornecedor/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response) => {
+        if (response) {
+            response.forEach(fornecedorItem => {
+                const option = document.createElement('option');
+                option.value = fornecedorItem.id_fornecedor; // Supondo que cada fornecedor tenha um 'id' único
+                option.textContent = fornecedorItem.nome; // Supondo que 'nome' seja o nome do fornecedor
+                fornecedorSelect.appendChild(option);
+            });
+        }
+    });
+}
+
 
 $(document).ready(function(){
+    populaFornecedor()
     populaCategoria()
+    
 })
 
 </script>

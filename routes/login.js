@@ -9,7 +9,7 @@ router.get('/',(req, res)=>{
 
 
 //cadastrar
-router.post('/salvarCadastro', (req, res)=>{
+router.post('/salvarCadastro', async (req, res)=>{
     const {nome, telefone, email, cnpj, senha} = req.body
 
     const query = 'INSERT INTO empresa (nome_empresa, cnpj, email, telefone, senha) VALUES (?, ?, ?, ?, ?)'
@@ -26,7 +26,7 @@ router.post('/salvarCadastro', (req, res)=>{
 
 //logar
 
-router.post('/logar', (req, res) => {
+router.post('/logar', async(req, res) => {
     const { email, senha } = req.body;
     
 

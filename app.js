@@ -48,6 +48,10 @@ app.use('/', produtos)
 const fornecedores = require('./routes/fornecedores')
 app.use('/', fornecedores)
 
+//entrada
+const entrada = require('./routes/entrada')
+app.use(entrada)
+
 
 
 const porta = process.env.PORT

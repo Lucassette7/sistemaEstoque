@@ -22,7 +22,7 @@
             <div class="cards" >
                 <div class="card" >
                     <h3>Total de Produtos</h3>
-                    <p id="total-products">150</p>
+                    <p id="total-produtos"></p>
                 </div>
                 <div class="card">
                     <h3>Produtos Vendidos</h3>
@@ -98,6 +98,21 @@ const salesChart = new Chart(ctxSales, {
     }
 });
 
+
+
+function totalProdutosEstoque(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+
+    $.ajax({
+        url: `/totalProdutos/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json',
+    }).done((response)=>{
+        if(response){
+            const valor = response
+        }
+    })
+}
     </script>
 </body>
 

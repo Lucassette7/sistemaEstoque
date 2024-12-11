@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrada de Produto</title>
+    <!-- Link para o Bootstrap 4/5 -->
+    
+    <%-include('partials/header')%>
+
+    <link rel="stylesheet" href="entrada.css">
+<body>
+    <%-include('partials/barraLateral')%>
+    <div class="container">
+        <div class="form-header">
+            <h2>ENTRADA DE PRODUTO</h2>
+            <p>Preencha as informações do produto abaixo:</p>
+        </div>
+
+        <!-- Formulário de Entrada de Produto -->
+        <form action="#" method="POST">
+            <!-- Nome do Produto -->
+            <div class="form-group">
+                <label for="produto">Selecione o produto</label>
+                <select class="form-select" id="produto" aria-label="Default select example">
+                </select>
+            </div>
+            <br>
+
+            <!-- Quantidade -->
+            <div class="form-group">
+                <label for="quantidade">Quantidade</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" placeholder="Digite a quantidade" required>
+            </div>
+            <br>
+            <!-- Fornecedor -->
+            <div class="form-group">
+                <label for="fornecedor">Fornecedor</label>
+                <select id="fornecedor" class="form-select" aria-label="Default select example">
+
+                    
+                </select>
+            </div>
+            <br>
+
+            <!-- Botão de Envio -->
+            <button type="button" onclick="salvarEntrada()" class="btn btn-primary btn-block">Cadastrar Produto</button>
+        </form>
+    </div>
+
+<script>
+    function populaProduto(){
+        const id_empresa = sessionStorage.getItem('id_empresa')
+        $.ajax({
+            url: `/populaProdutos/${id_empresa}`,
+            method: 'GET',
+            contentType: 'application/json'
+        }).done((response)=>{
+            if(response){
+                response.forEach(produtos => {
+                    const select = document.getElementById('produto')
+                    const option = document.createElement('option')
+                    option.value = produtos.id_produto
+                    option.textContent = produtos.produto
+                    select.appendChild(option)
+                    
+                });
+            }
+        })
+    }
+
+
+//popula fornecedor
+function populaFornecedor(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+
+    $.ajax({
+        url: `/populaFornecedor/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response)=>{
+        if(response){
+            response.forEach(fornecedor => {
+                const select = document.getElementById('fornecedor')
+                const option = document.createElement('option')
+                option.value = fornecedor.id_fornecedor
+                option.textContent = fornecedor.nome
+                select.appendChild(option)
+            });
+        }
+    })
+}
+
+
+//salva entrada do produto
+function salvarEntrada(){
+    const produto = $("#produto").val()
+    const quantidade = $("#quantidade").val()
+    const fornecedor = $("#fornecedor").val()
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    
+
+    const body = {produto, quantidade, fornecedor, id_empresa}
+
+    $.ajax({
+        url: '/salvarEntrada',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(body)
+    }).done((response)=>{
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Inserido com sucesso',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao inserir',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    })
+}
+
+
+
+$(document).ready(function(){
+    populaProduto()
+    populaFornecedor()
+})
+</script>
+
+</body>
+</html>

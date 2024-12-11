@@ -117,25 +117,27 @@
     }
 
     //logar
-    function logar(){
+    async function logar(){
         const email = $("#email1").val()
         const senha = $("#senha1").val()
         const body = {email, senha}
 
-        $.ajax({
-            url: '/logar',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(body)
-        }).done((response)=>{
-            if(response.success){
-                Swal.fire({
-                    icon: 'success',
-                    position: 'top-end',
-                    title: 'Seja bem vindo',
-                    timer: 1500
-                }).then(()=>{
-                    $.ajax({
+        try{
+            const response = await $.ajax({
+                url: '/logar',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(body)
+            }).done((resposta)=>{
+                if(resposta.success){
+                    Swal.fire({
+                        icon: 'success',
+                        position: 'top-end',
+                        title: 'Seja bem vindo',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(()=>{
+                        $.ajax({
                         url: `/id_empresa/${email}`,
                         method: 'GET',
                         contentType: 'application/json'
@@ -145,20 +147,30 @@
                             sessionStorage.setItem('id_empresa', id)
                             
                         }
+                        window.location.href = '/dashboard' 
                     })
-                    sessionStorage.setItem('email', email)
-                    window.location.href = '/dashboard'
+
                 })
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        position: 'top-end',
+                        title: 'Email ou senha invalidos',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }catch(erro){
+            if(erro){
+                alert('erro catch')
             }
-            else{
-                Swal.fire({
-                    icon: 'error',
-                    position: 'top-end',
-                    title: 'Email ou senha incorretos',
-                    timer: 1500
-                })
-            }
-        })
+        }
+
+
+
+        
     }
 </script>
 </html>
