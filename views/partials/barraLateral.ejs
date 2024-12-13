@@ -19,10 +19,10 @@
         <!-- Links de navegação -->
         <div>
             <a href="/dashboard">DASHBOARD <i class="ri-pie-chart-2-line"></i></a>
+            <a href="/fornecedores">FORNECEDORES <i class="ri-truck-line"></i></a>
             <a href="/produtos">PRODUTOS <i class="ri-shopping-bag-3-fill"></i></a>
             <a href="/entrada">ENTRADA <i class="ri-shopping-cart-line"></i></a>
             <a href="#">SAIDA <i class="ri-coins-line"></i></a>
-            <a href="/fornecedores">FORNECEDORES <i class="ri-truck-line"></i></a>
             <a href="#">CONFIGURAÇÃO <i class="ri-tools-fill"></i></a>
             <a onclick="sair()" href="#">SAIR <i class="ri-door-open-line"></i></a>
             <br>
@@ -32,8 +32,12 @@
 
 </body>
 <script>
-    function sair(){
-        window.location.href = '/'
-    }
+function sair() {
+    // Limpa o sessionStorage, removendo todos os itens armazenados
+    sessionStorage.clear('id_empresa');
+
+    // Redireciona o usuário para a página de login
+    window.location.href = '/';  // Alterar para a URL de login
+}
 </script>
 </html>

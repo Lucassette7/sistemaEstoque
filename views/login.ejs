@@ -24,7 +24,7 @@
                     <input type="password" class="form-control" id="senha1" placeholder="Digite sua senha" required>
                 </div>
                 <!-- Login Button -->
-                <button type="submit" class="btn btn-login w-100" onclick="logar()">Entrar</button>
+                <center><button type="button" class="btn btn-primary" onclick="logar()">Entrar</button></center>
             </form>
             <div class="forgot-password">
                 <a href="#" onclick="abrirModal()">Cadastre-se</a><br>
@@ -82,41 +82,56 @@
         var modal = new bootstrap.Modal(document.getElementById('myModal'));
         modal.show();
     }
-//cadastro
-    function cadastrar(){
-        const nome = $("#nome").val()
-        const telefone = $("#telefone").val()
-        const email = $("#email2").val()
-        const cnpj = $("#cnpj").val()
-        const senha = $("#senha2").val()
-        const body = {nome, telefone, email, cnpj, senha}
 
-        $.ajax({
+
+    async function cadastrar() {
+        const nome = $("#nome").val();
+        const telefone = $("#telefone").val();
+        const email = $("#email2").val();
+        const cnpj = $("#cnpj").val();
+        const senha = $("#senha2").val();
+        const body = { nome, telefone, email, cnpj, senha };
+
+    try {
+        const response = await $.ajax({
             url: '/salvarCadastro',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(body)
-        }).done((response)=>{
-            if(response.success){
-                Swal.fire({
-                    icon: 'success',
-                    position: 'top-end',
-                    title: 'Cadastrado com sucesso',
-                    timer: 1500
-                })
-            }
-            else{
-                Swal.fire({
-                    icon: 'error',
-                    position: 'top-end',
-                    title: 'Erro ao cadastrar',
-                    timer: 1500
-                })
-            }
-        })
-    }
+            data: JSON.stringify(body),
+        });
 
-    //logar
+        if (response.success) {
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Cadastrado com sucesso',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(()=>{
+                window.location.reload();
+            })
+            
+        } else {
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao cadastrar',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    } catch (erro) {
+        console.error('Erro na requisição:', erro);
+        Swal.fire({
+            icon: 'error',
+            position: 'top-end',
+            title: 'Erro ao tentar cadastrar. Tente novamente.',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+}
+
     async function logar(){
         const email = $("#email1").val()
         const senha = $("#senha1").val()
@@ -128,16 +143,17 @@
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(body)
-            }).done((resposta)=>{
-                if(resposta.success){
-                    Swal.fire({
-                        icon: 'success',
-                        position: 'top-end',
-                        title: 'Seja bem vindo',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(()=>{
-                        $.ajax({
+            })
+            if(response.success){
+                Swal.fire({
+                    icon: 'success',
+                    position: 'top-end',
+                    title: 'Seja bem vindo',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(()=>{
+                    window.location.href = '/dashboard'
+                    $.ajax({
                         url: `/id_empresa/${email}`,
                         method: 'GET',
                         contentType: 'application/json'
@@ -147,30 +163,29 @@
                             sessionStorage.setItem('id_empresa', id)
                             
                         }
-                        window.location.href = '/dashboard' 
                     })
-
                 })
-                }
-                else{
-                    Swal.fire({
-                        icon: 'error',
-                        position: 'top-end',
-                        title: 'Email ou senha invalidos',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-            })
+            }
+            else{
+                Swal.fire({
+                    icon: 'error',
+                    position: 'top-end',
+                    title: 'Email ou senha incorretos',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
         }catch(erro){
             if(erro){
-                alert('erro catch')
+                Swal.fire({
+                    icon: 'error',
+                    position: 'top-end',
+                    title: 'Erro no servidor tente novamente mais tarde',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
         }
-
-
-
-        
     }
 </script>
 </html>

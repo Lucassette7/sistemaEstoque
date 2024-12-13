@@ -113,6 +113,22 @@ function totalProdutosEstoque(){
         }
     })
 }
+
+function sessao() {
+    const id_empresa = sessionStorage.getItem('id_empresa');
+    // Verifica se id_empresa não existe ou está vazio
+    if (!id_empresa) {
+        window.location.href = '/' ;  // Redireciona para a página de login
+    }
+}
+
+
+// Verifica a cada 2 segundos
+setInterval(() => {
+    sessao();
+}, 1000);
+
+
     </script>
 </body>
 

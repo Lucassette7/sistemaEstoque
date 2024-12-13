@@ -95,15 +95,70 @@
             </div>
         </div>
 </div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" id='fecharModal2' class="close btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Nome</span>
+                <input type="text" id="nomeEditar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">CNPJ</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cnpjEditar" maxlength="14">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Email</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="emailEditar" >
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Fone</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="foneEditar" maxlength="11">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">CEP</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cepEditar" maxlength="8">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Estado</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="estadoEditar">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Cidade</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cidadeEditar">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Bairro</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="bairroEditar">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">Rua</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="ruaEditar">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 15%;">N°</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="numeroEditar" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="atualizar">Atualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
 
 function abrirModal(){
       // Abre o modal com o ID 'myModal'
-        var modal = new bootstrap.Modal(document.getElementById('modal'));
-        modal.show();
-    }
+    var modal = new bootstrap.Modal(document.getElementById('modal'));
+    modal.show();
+}
 
 
 function preencheCEP(){
@@ -234,9 +289,8 @@ $('#refreshButton').on('click', function() {
                         data: null,
                         render: function(data, type, row) {
                             return `
-                            <button class="btn btn-info btn-sm" onclick="editar(${data.id_fornecedor})"><i class="ri-printer-fill"></i></button>&nbsp;
-                            <button class="btn btn-success btn-sm" onclick="email(${data.id_fornecedor})"><i class="ri-pencil-line"></i></button>&nbsp;
-                           
+                            <button id='botao' class="btn btn-primary btn-sm" onclick="abrirModalEditar(${data.id_fornecedor})"><i class="ri-pencil-line"></i></button>&nbsp;
+                            <button class="btn btn-success btn-sm" onclick="informacao(${data.id_fornecedor})"><i class="ri-pencil-line"></i></button>&nbsp;
                             `;
                         }
                     }
@@ -244,6 +298,104 @@ $('#refreshButton').on('click', function() {
                 pageLength: 7
             });
         });
+
+
+    // Abre modal editar fornecedor
+    function abrirModalEditar(id){
+        var modal = new bootstrap.Modal(document.getElementById('exampleModalCenter'))
+        modal.show()
+
+        setTimeout(()=>{
+            dadosFornecedor(id)
+        },500)
+
+    }
+
+    
+    function dadosFornecedor(id){
+        const response = fetch(`/dadosModal/${id}`, {
+            method: 'GET',
+        }).then((response)=>{
+            if(!response.ok){
+                alert('Erro ao buscar dados')
+            }
+
+            return response.json()
+
+        }).then((dados)=>{
+            const nome = dados[0].nome
+            const cnpj = dados[0].cnpj
+            const email = dados[0].email
+            const telefone = dados[0].telefone
+            const cep = dados[0].cep
+            const estado = dados[0].estado
+            const cidade = dados[0].cidade
+            const bairro = dados[0].bairro
+            const rua = dados[0].rua
+            const numero = dados[0].numero
+
+            document.getElementById('nomeEditar').value = nome
+            document.getElementById('cnpjEditar').value = cnpj
+            document.getElementById('emailEditar').value = email
+            document.getElementById('foneEditar').value = telefone
+            document.getElementById('cepEditar').value = cep
+            document.getElementById('estadoEditar').value = estado
+            document.getElementById('cidadeEditar').value = cidade
+            document.getElementById('bairroEditar').value = bairro
+            document.getElementById('ruaEditar').value = rua
+            document.getElementById('numeroEditar').value = numero
+
+
+            atualizaDadosFornecedor(id)
+        })
+        
+    }
+
+    
+    function atualizaDadosFornecedor(id){
+        
+        document.getElementById('atualizar').addEventListener("click", function(){
+            const nome = document.getElementById('nomeEditar').value
+        const cnpj = document.getElementById('cnpjEditar').value
+        const email = document.getElementById('emailEditar').value
+        const fone = document.getElementById('foneEditar').value
+        const cep = document.getElementById('cepEditar').value
+        const estado = document.getElementById('estadoEditar').value
+        const cidade = document.getElementById('cidadeEditar').value
+        const bairro = document.getElementById('bairroEditar').value
+        const rua = document.getElementById('ruaEditar').value
+        const numero = document.getElementById('numeroEditar').value
+        const body = {nome, cnpj, email, fone, cep, estado, cidade, bairro, rua, numero}
+        $.ajax({
+            url: `/atualizaDadosFornecedor/${id}`,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(body)
+        }).done((response)=>{
+            if(response.success){
+                Swal.fire({
+                    icon: 'success',
+                    position: 'top-end',
+                    title: 'Atualizado com sucesso',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(()=>{
+                    window.location.reload()
+                })
+            }
+            else{
+                Swal.fire({
+                    icon: 'error',
+                    position: 'top-end',
+                    title: 'Erro ao atualizar dados',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
+    })
+}
+
 
     $(document).ready(function() {
       $('#tabelaFornecedores').DataTable(); // Ativa o DataTable

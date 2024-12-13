@@ -59,4 +59,39 @@ router.get('/dadosFornecedor/:id_empresa',(req, res)=>{
     })
 })
 
+//leva Dados fornecedor para o modal
+router.get('/dadosModal/:id', (req, res)=>{
+    const id = req.params.id
+    console.log(id)
+    
+    const query = 'SELECT * FROM fornecedor WHERE id_fornecedor = ?'
+
+    db.query(query, [id], (erro, results)=>{
+        if(erro){
+            return res.json({success: false})
+        }
+        if(results.length > 0){
+            return res.json(results)
+        }
+    })
+})
+
+
+//atualiza dados fornecedor
+router.put('/atualizaDadosFornecedor/:id', (req, res)=>{
+    const id = req.params.id
+    const {nome, cnpj, email, fone, cep, estado, cidade, bairro, rua, numero} = req.body
+
+    const query = 'UPDATE fornecedor SET nome = ?, cnpj = ?, email = ?, telefone = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, rua = ?, numero = ? WHERE id_fornecedor = ?'
+
+    db.query(query, [nome, cnpj, email, fone, cep, estado, cidade, bairro, rua, numero, id], (erro, results)=>{
+        if(erro){
+            return res.json({success: false})
+        }
+        if(results.affectedRows > 0){
+            return res.json({success: true})
+        }
+    })
+})
+
 module.exports = router

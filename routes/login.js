@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const db = require('../database/db')
+const { emit } = require("pdfkit")
 
 
 router.get('/',(req, res)=>{
@@ -9,20 +10,24 @@ router.get('/',(req, res)=>{
 
 
 //cadastrar
-router.post('/salvarCadastro', async (req, res)=>{
-    const {nome, telefone, email, cnpj, senha} = req.body
+router.post('/salvarCadastro', async (req, res) => {
+    const { nome, telefone, email, cnpj, senha } = req.body;
 
-    const query = 'INSERT INTO empresa (nome_empresa, cnpj, email, telefone, senha) VALUES (?, ?, ?, ?, ?)'
+    const query = 'INSERT INTO empresa (nome_empresa, cnpj, email, telefone, senha) VALUES (?, ?, ?, ?, ?)';
 
-    db.query(query, [nome, cnpj, email, telefone, senha], (erro, results)=>{
-        if(erro){
-            return res.status(404).json({success: false})
+    db.query(query, [nome, cnpj, email, telefone, senha], (erro, results) => {
+        if (erro) {
+            console.error('Erro ao salvar cadastro:', erro); // Logando o erro no servidor
+            return res.status(500).json({ success: false, message: 'Erro ao cadastrar no banco de dados' });
         }
-        if(results.affectedRows > 0){
-            return res.json({success: true})
+        if (results.affectedRows > 0) {
+            return res.json({ success: true });
+        } else {
+            return res.status(400).json({ success: false, message: 'Nenhum dado foi inserido' });
         }
-    })
-})
+    });
+});
+
 
 //logar
 
