@@ -97,13 +97,12 @@ function salvarEntrada(){
     const quantidade = $("#quantidade").val()
     const fornecedor = $("#fornecedor").val()
     const id_empresa = sessionStorage.getItem('id_empresa')
-    
-
     const body = {produto, quantidade, fornecedor, id_empresa}
+
 
     $.ajax({
         url: '/salvarEntrada',
-        method: 'POST',
+        method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(body)
     }).done((response)=>{
@@ -112,15 +111,6 @@ function salvarEntrada(){
                 icon: 'success',
                 position: 'top-end',
                 title: 'Inserido com sucesso',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        }
-        else{
-            Swal.fire({
-                icon: 'error',
-                position: 'top-end',
-                title: 'Erro ao inserir',
                 showConfirmButton: false,
                 timer: 1500
             })

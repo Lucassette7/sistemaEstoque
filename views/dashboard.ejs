@@ -94,6 +94,7 @@
                             <th>VALOR</th>
                             <th>QUANTIDADE</th>
                             <th>MEDIDA</th>
+                            <th>AÇÃO</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,56 +104,161 @@
         </div>
     </div>
 
+<!-- Modal HTML -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">PRODUTO</span>
+                <input id="produto" type="text" class="form-control" placeholder="Produto" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">DESCRIÇÃO</span>
+                <input id="descricao" type="text" class="form-control" placeholder="Descrição" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">MARCA</span>
+                <input id="marca" type="text" class="form-control" placeholder="Marca" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">COR</span>
+                <input id="cor" type="text" class="form-control" placeholder="Cor" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">VALOR</span>
+                <input id="valor" type="text" class="form-control" placeholder="Valor" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">QUANTIDADE</span>
+                <input id="quantidade" type="text" class="form-control" placeholder="Quantidade" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <span style="width: 25%;" class="input-group-text" id="addon-wrapping">MEDIDA</span>
+                <input id="medida" type="text" class="form-control" placeholder="Medida" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button onclick="salvar()" type="button" class="btn btn-primary">Salvar alterações</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 
 // Gráfico de Estoque
-const ctxStock = document.getElementById('stockChart').getContext('2d');
-const stockChart = new Chart(ctxStock, {
-    type: 'bar',
-    data: {
-        labels: ['Produto A', 'Produto B', 'Produto C', 'Produto D'],
-        datasets: [{
-            label: 'Estoque Atual',
-            data: [30, 45, 60, 25],  // Quantidade de estoque
-            backgroundColor: 'rgba(33, 150, 243, 0.6)',
-            borderColor: '#2196F3',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
+function graficoBarra() {
+    const id = sessionStorage.getItem('id_empresa');
+
+    $.ajax({
+        url: `/graficoBarra/${id}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response) => {
+        if (response && response.length >= 4) {
+            // Atribuindo as variáveis diretamente com a resposta
+            const produto1 = response[0].produto;
+            const produto2 = response[1].produto;
+            const produto3 = response[2].produto;
+            const produto4 = response[3].produto;
+
+            const quantidadeProduto1 = response[0].quantidade;
+            const quantidadeProduto2 = response[1].quantidade;
+            const quantidadeProduto3 = response[2].quantidade;
+            const quantidadeProduto4 = response[3].quantidade;
+
+            // Configuração do gráfico após obter os dados
+            const ctxStock = document.getElementById('stockChart').getContext('2d');
+            const stockChart = new Chart(ctxStock, {
+                type: 'bar',
+                data: {
+                    labels: [produto1, produto2, produto3, produto4],
+                    datasets: [{
+                        label: 'ESTOQUE ATUAL (Os 4 produtos que mais contem unidades em estoque)',
+                        data: [quantidadeProduto1, quantidadeProduto2, quantidadeProduto3, quantidadeProduto4],
+                        backgroundColor: 'rgba(33, 150, 243, 0.6)',
+                        borderColor: '#2196F3',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } else {
+            console.error("Erro: Não foram encontrados dados suficientes para o gráfico.");
         }
-    }
-});
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        console.error("Erro na requisição: " + textStatus, errorThrown);
+    });
+}
+
+
 
 // Gráfico de Vendas
-const ctxSales = document.getElementById('salesChart').getContext('2d');
-const salesChart = new Chart(ctxSales, {
-    type: 'line',
-    data: {
-        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-        datasets: [{
-            label: 'Vendas Realizadas',
-            data: [200, 300, 250, 450],  // Vendas ao longo do tempo
-            borderColor: '#FF9800',
-            backgroundColor: 'rgba(255, 152, 0, 0.2)',
-            borderWidth: 2,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
+function graficoMinimo() {
+    const id = sessionStorage.getItem('id_empresa');
+
+    $.ajax({
+        url: `/graficoBarraMin/${id}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response) => {
+        if (response && response.length >= 4) {
+            // Atribuindo as variáveis diretamente com a resposta
+            const produto1 = response[0].produto;
+            const produto2 = response[1].produto;
+            const produto3 = response[2].produto;
+            const produto4 = response[3].produto;
+
+            const quantidadeProduto1 = response[0].quantidade;
+            const quantidadeProduto2 = response[1].quantidade;
+            const quantidadeProduto3 = response[2].quantidade;
+            const quantidadeProduto4 = response[3].quantidade;
+
+            // Configuração do gráfico após obter os dados
+            const ctxSales = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctxSales, {
+                type: 'bar',
+                data: {
+                    labels: [produto1, produto2, produto3, produto4],
+                    datasets: [{
+                        label: 'ESTOQUE ATUAL (Os 4 Produtos com baixa quantia em estoque)',
+                        data: [quantidadeProduto1, quantidadeProduto2, quantidadeProduto3, quantidadeProduto4],
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        borderColor: '#FF9800',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } else {
+            console.error("Erro: Não foram encontrados dados suficientes para o gráfico.");
         }
-    }
-});
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        console.error("Erro na requisição: " + textStatus, errorThrown);
+    });
+}
+
+
 
 
 
@@ -218,12 +324,13 @@ $(document).ready(function(){
             dataSrc: 'data'
         },
         columnDefs: [
-            { width: "3%", targets: 0, className: 'text-center' }, // PRODUTO
-            { width: "7%", targets: 1, className: 'text-center' }, // MARCA
+            { width: "15%", targets: 0, className: 'text-center' }, // PRODUTO
+            { width: "10%", targets: 1, className: 'text-center' }, // MARCA
             { width: "7%", targets: 2, className: 'text-center' }, // COR
             { width: "7%", targets: 3, className: 'text-center' }, // VALOR
             { width: "5%", targets: 4, className: 'text-center' }, // QUANTIDADE
-            { width: "5%", targets: 5, className: 'text-center' } // MEDIDA
+            { width: "3%", targets: 5, className: 'text-center' }, // MEDIDA
+            { width: "2%", targets: 6, className: 'text-center' }
             
         ],
         columns:[
@@ -232,7 +339,14 @@ $(document).ready(function(){
             {data: 'cor'},
             {data: 'valor'},
             {data: 'quantidade'},
-            {data: 'medida'}
+            {data: 'medida'},
+            {data: null,
+                render: function(data){
+                    return `
+                    <button class="btn btn-info btn-sm" onclick="editar(${data.id_produto})"><i class="ri-pencil-line"></i></button>&nbsp;
+                    `
+                }
+            }
         ]
     })
 })
@@ -242,7 +356,57 @@ setInterval(() => {
     sessao();
 }, 1000);
 
+let id_produto = ''
+function editar(id){
+    const modalElement = document.getElementById('exampleModal');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+    id_produto = id
+}
 
+function salvar(){
+    const id = id_produto
+    const produto = $("#produto").val()
+    const marca = $("#marca").val()
+    const cor = $("#cor").val()
+    const valor = $("#valor").val()
+    const quantidade = $("#quantidade").val()
+    const medida = $("#medida").val()
+    const descricao = $("#descricao").val()
+
+    const body = {produto, marca, cor, valor, quantidade, medida, descricao}
+        $.ajax({
+            url: `/editaProduto/${id}`,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(body)
+        }).done((response)=>{
+            if(response.success){
+                Swal.fire({
+                icon: 'success',
+                postion: 'top-end',
+                title: 'Alterado com sucesso',
+                ShowConfirmButton: false,
+                timer: 1500
+            })
+        }
+    }).fail((erro)=>{
+        if(erro){
+            Swal.fire({
+                icon: 'error',
+                postion: 'top-end',
+                title: 'Erro ao alterar',
+                ShowConfirmButton: false,
+                timer: 1500
+            })
+        }
+    })
+}
+
+$(document).ready(function(){
+    graficoBarra();
+    graficoMinimo()
+})
     </script>
 </body>
 
