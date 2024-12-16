@@ -62,7 +62,7 @@ router.get('/dadosFornecedor/:id_empresa',(req, res)=>{
 //leva Dados fornecedor para o modal
 router.get('/dadosModal/:id', (req, res)=>{
     const id = req.params.id
-    console.log(id)
+
     
     const query = 'SELECT * FROM fornecedor WHERE id_fornecedor = ?'
 

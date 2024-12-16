@@ -39,13 +39,14 @@ router.get('/populaFornecedor/:id_empresa', (req, res)=>{
     })
 })
 
+
 //salva entrada
 router.post('/salvarEntrada',(req, res)=>{
-    const {produto, quantidade, fornecedor, id_empresa} = req.body
+    const {produto, quantidade, id_empresa, fornecedor} = req.body
 
-    const query = 'UPDATE produto set quantidade = ? WHERE id_produto = ? and id_empresa = ?'
+    const query = 'UPDATE produto SET quantidade = ? WHERE id_produto = ? and id_empresa = ? and id_fornecedor = ?'
 
-    db.query(query, [quantidade, produto, id_empresa], (erro, results)=>{
+    db.query(query, [quantidade, produto, id_empresa, fornecedor], (erro, results)=>{
         if(erro){
             return res.status(403).send()
         }
@@ -54,4 +55,6 @@ router.post('/salvarEntrada',(req, res)=>{
         }
     })
 })
+
+
 module.exports = router

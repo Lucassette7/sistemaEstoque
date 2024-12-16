@@ -128,6 +128,16 @@ function salvarEntrada(){
     })
 }
 
+function sessao(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    if(!id_empresa){
+        window.location.href = '/'
+    }
+}
+
+setInterval(()=>{
+    sessao()
+}, 1000)
 
 
 $(document).ready(function(){

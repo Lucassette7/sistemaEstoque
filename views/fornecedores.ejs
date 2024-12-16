@@ -275,7 +275,7 @@ $('#refreshButton').on('click', function() {
                 columnDefs: [
                     { width: "5%", targets: 0, className: 'text-center' }, // ID
                     { width: "40%", targets: 1, className: 'text-left' }, // nome
-                    { width: "26%", targets: 2, className: 'text-left' }, // email
+                    { width: "26%", targets: 2, className: 'text-left' }, // emailc
                     { width: "20%", targets: 3, className: 'text-center' }, // telefone
 
                 ],
@@ -396,10 +396,21 @@ $('#refreshButton').on('click', function() {
     })
 }
 
+function sessao(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    if(!id_empresa){
+        window.location.href = '/'
+    }
+}
 
-    $(document).ready(function() {
-      $('#tabelaFornecedores').DataTable(); // Ativa o DataTable
-    });
+setInterval(()=>{
+    sessao()
+}, 1000)
+
+
+$(document).ready(function() {
+    $('#tabelaFornecedores').DataTable(); // Ativa o DataTable
+});
 </script>
 </body>
 </html>

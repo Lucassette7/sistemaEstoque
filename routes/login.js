@@ -65,9 +65,6 @@ router.get('/id_empresa/:email', (req, res)=>{
             return res.json(results)
         }
     })
-
-
-
 })
 
 

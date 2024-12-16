@@ -45,14 +45,7 @@ router.get('/populaCategoria/:id_empresa', (req, res)=>{
 router.post('/adicionaProduto/:id_empresa', (req, res)=>{
     const id_empresa = req.params.id_empresa
     const {id_fornecedor, categoria, marca, produto, cor, valor, descricao, medida} = req.body
-    console.log(id_empresa)
-    console.log(categoria)
-    console.log(marca)
-    console.log(produto)
-    console.log(cor)
-    console.log(valor)
-    console.log(descricao)
-    console.log(id_fornecedor)
+
 
 
     const query = 'SELECT * FROM categoria WHERE categoria = ? and id_empresa = ?'
