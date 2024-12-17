@@ -4,7 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tabela de Fornecedores</title>
+<style>
+            html, body {
+            height: 100%;
+            margin: 0;
+        }
 
+        /* Container principal com layout Flexbox */
+        .container-fluid {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Barra lateral */
+        .barra-lateral {
+            width: 250px; /* Largura fixa para a barra lateral */
+            background-color: #f8f9fa;
+            padding: 20px;
+            height: 100vh;
+            position: fixed; /* Fixa a barra lateral */
+            top: 0;
+            left: 0;
+        }
+
+        /* Conteúdo principal */
+        .conteudo-principal {
+            flex: 1;
+            margin-left: 250px; /* Ajusta o conteúdo principal para não sobrepor a barra lateral */
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Garantir que a tabela ocupe a largura do conteúdo */
+        #DataTable {
+            width: 100%;
+            max-width: 100%;
+        }
+</style>
 
 <%- include('partials/header') %>
 <link rel="stylesheet" href="fornecedores.css">
@@ -15,26 +51,29 @@
 <%- include('partials/barraLateral') %>
 
 <!-- Conteúdo Principal -->
-    <div class="container">
+<div class="container-fluid">
+    <div class="conteudo-principal">
         <h2 class="text-center">Fornecedores</h2>
 
         <!-- Tabela -->
-        <table id="DataTable" class="table table-striped table-nowrap table-bordered align-middle mb-0">
+        <table id="DataTable" class="table table-bordered">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>NOME</th>
-                    <th>EMAIL</th> 
+                    <th>EMAIL</th>
                     <th>TELEFONE</th>
                     <th>AÇÃO</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Conteúdo da tabela será inserido aqui -->
             </tbody>
         </table>
         <hr>
         <button class="btn btn-primary" id="cadastrar" onclick="abrirModal()">CADASTRAR FORNECEDORES</button>
     </div>
+</div>
 
 
 <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"           aria-labelledby="staticBackdropLabel" aria-hidden="true" style="display: none;">

@@ -60,7 +60,7 @@
             <!-- Cards de Resumo -->
             <div class="cards">
                 <div class="card">
-                    <h3>Total de Produtos</h3>
+                    <h3>Valor total em estoque</h3>
                     <p id="total-produtos"></p>
                 </div>
                 <div class="card">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="card">
                     <h3>Produtos em Falta</h3>
-                    <p id="out-of-stock">30</p>
+                    <p id="produto_falta">0</p>
                 </div>
             </div>
             
@@ -155,20 +155,19 @@
 // Gráfico de Estoque
 function graficoBarra() {
     const id = sessionStorage.getItem('id_empresa');
-
     $.ajax({
         url: `/graficoBarra/${id}`,
         method: 'GET',
         contentType: 'application/json'
     }).done((response) => {
-        if (response && response.length >= 4) {
+        if (response) {
             // Atribuindo as variáveis diretamente com a resposta
             const produto1 = response[0].produto;
             const produto2 = response[1].produto;
             const produto3 = response[2].produto;
             const produto4 = response[3].produto;
 
-            const quantidadeProduto1 = response[0].quantidade;
+            const quantidadeProduto1 = response[0].quantidade; 
             const quantidadeProduto2 = response[1].quantidade;
             const quantidadeProduto3 = response[2].quantidade;
             const quantidadeProduto4 = response[3].quantidade;
@@ -235,7 +234,7 @@ function graficoMinimo() {
                     labels: [produto1, produto2, produto3, produto4],
                     datasets: [{
                         label: 'ESTOQUE ATUAL (Os 4 Produtos com baixa quantia em estoque)',
-                        data: [quantidadeProduto1, quantidadeProduto2, quantidadeProduto3, quantidadeProduto4],
+                        data: [quantidadeProduto1, quantidadeProduto2, quantidadeProduto3, quantidadeProduto4 || 0, 0, 0, 0],
                         backgroundColor: 'rgba(255, 152, 0, 0.2)',
                         borderColor: '#FF9800',
                         borderWidth: 2
@@ -403,9 +402,40 @@ function salvar(){
     })
 }
 
+//mostra total produto
+function totalProduto(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    $.ajax({
+        url: `/totalProduto/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response)=>{
+        if(response){
+            const valor = Number(response[0].total)
+            const valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('total-produtos').textContent = valorFormatado
+        }
+    })
+}
+
+//quantidade em falta
+function produtoFalta(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    $.ajax({
+        url: `/produtoEmfalta/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response)=>{
+        const falta = response[0].Quantidade_Produto
+        document.getElementById('produto_falta').textContent = falta
+    })
+}
+
 $(document).ready(function(){
     graficoBarra();
-    graficoMinimo()
+    graficoMinimo();
+    totalProduto();
+    produtoFalta()
 })
     </script>
 </body>

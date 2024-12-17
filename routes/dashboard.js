@@ -73,4 +73,36 @@ router.get('/graficoBarraMin/:id', (req, res)=>{
     })
 })
 
+//total produtos
+router.get('/totalProduto/:id_empresa', (req, res)=>{
+    const id_empresa = req.params.id_empresa
+
+    const query = 'SELECT SUM(quantidade * valor) AS total FROM produto WHERE id_empresa = ?'
+
+    db.query(query, [id_empresa], (erro, results)=>{
+        if(erro){
+            res.status(404)
+        }
+        if(results.length > 0){
+            return res.json(results)
+        }
+    })
+})
+
+//produtos em falta
+router.get('/produtoEmfalta/:id_empresa', (req, res)=>{
+    const id = req.params.id_empresa
+
+    const query = 'SELECT COUNT(produto) AS Quantidade_Produto FROM produto WHERE quantidade < 10 AND id_empresa = ?'
+
+    db.query(query, [id], (erro, results)=>{
+        if(erro){
+            res.json({vazio: 0})
+        }
+        if(results.length > 0){
+            return res.json(results)
+        }
+    })
+})
+
 module.exports = router
