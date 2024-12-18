@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saída de Produto de Estoque</title>
+    <%-include('partials/header')%>
+    <link rel="stylesheet" href="saida.css">
+
+<body>
+    <%-include('partials/barraLateral')%>
+    <br><br><br><br>
+    <div class="container">
+        <header>
+            <h1>Controle de Estoque - Saída de Produto</h1>
+        </header>
+
+        <section class="form-container">
+            <form action="#" method="POST">
+                <label for="produto">Selecione o Produto:</label>
+                <select id="produto" name="produto" required>
+
+                </select>
+
+                <label for="quantidade">Quantidade de Saída:</label>
+                <input type="number" id="quantidade" name="quantidade" min="1" required>
+
+                <!-- <label for="destino">Destino:</label>
+                <input id="destino" name="destino" required></input> -->
+
+                <br>
+                <button onclick="registraSaida()" class="btn btn-primary" type="button">Registrar Saída</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Seven System</p>
+        </footer>
+    </div>
+
+    <script>
+        
+    function sessao() {
+        const id_empresa = sessionStorage.getItem('id_empresa');
+    
+        // Verifica se id_empresa não existe ou está vazio
+        if (!id_empresa) {
+            window.location.href = '/' ;  // Redireciona para a página de login
+        }
+    }
+
+    //popula produtos
+    function populaProduto(){
+        const id_empresa = sessionStorage.getItem('id_empresa')
+        $.ajax({
+            url: `/populaDados/${id_empresa}`,
+            method: 'GET',
+            contentType: 'application/json'
+        }).done((response)=>{
+            const produtoHTML = document.getElementById('produto')
+            produtoHTML.innerHTML = ''
+
+            const option = document.createElement('option')
+            option.value = ''
+            option.textContent = 'Selecione um produto'
+            produtoHTML.appendChild(option)
+
+            response.forEach(dados => {
+                const option = document.createElement('option')
+                option.value = dados.produto
+                option.textContent = dados.produto
+                produtoHTML.appendChild(option)
+            });
+        })
+    }
+
+
+// envia dados saida
+function registraSaida(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    const produto = $("#produto").val()
+    const quantidade = $("#quantidade").val()
+    // const destino = $("#destino").val()
+    const body = {produto, quantidade, id_empresa}
+    $.ajax({
+        url: '/registraSaida',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(body)
+    }).done((response)=>{
+        if(response.success){
+            alert('Saida registrada')
+        }
+    })
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    setInterval(() => {
+        sessao()
+    }, 500);
+
+    $(document).ready(function(){
+        populaProduto()
+    })
+    </script>
+</body>
+</html>

@@ -52,6 +52,10 @@ app.use('/', fornecedores)
 const entrada = require('./routes/entrada')
 app.use(entrada)
 
+//saida
+const saida = require('./routes/saida')
+app.use(saida)
+
 
 
 
