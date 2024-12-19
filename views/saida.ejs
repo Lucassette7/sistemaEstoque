@@ -89,7 +89,22 @@ function registraSaida(){
         data: JSON.stringify(body)
     }).done((response)=>{
         if(response.success){
-            alert('Saida registrada')
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Saida Registrada',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Quantia insulficiente para saida',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
     })
 

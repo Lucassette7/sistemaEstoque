@@ -52,18 +52,24 @@ router.post('/registraSaida', (req, res)=>{
                         if(results.length > 0){
                             const quantidadeBanco = results[0].quantidade
                             const quantidadeNumero = Number(quantidade)
-                            const subtracao = (quantidadeBanco-quantidadeNumero)
+                            if(quantidadeBanco >= quantidadeNumero){
+                                const subtracao = (quantidadeBanco-quantidadeNumero)
                             
-                            const query4 = 'UPDATE produto SET quantidade = ? WHERE id_produto = ? and id_empresa = ?'
+                                const query4 = 'UPDATE produto SET quantidade = ? WHERE id_produto = ? and id_empresa = ?'
+    
+                                db.query(query4, [subtracao, id_produto, id_empresa], (erro, results)=>{
+                                    if(erro){
+                                        console.log('erro query4')
+                                    }
+                                    if(results.affectedRows > 0){
+                                        return res.json({success: true})
+                                    }
+                                })
+                            }
+                            else{
+                                return res.json({success: false})
+                            }
 
-                            db.query(query4, [subtracao, id_produto, id_empresa], (erro, results)=>{
-                                if(erro){
-                                    console.log('erro query4')
-                                }
-                                if(results.affectedRows > 0){
-                                    return res.json({success: true})
-                                }
-                            })
                         }
                     })
                 }
