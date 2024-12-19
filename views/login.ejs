@@ -90,7 +90,9 @@
         const email = $("#email2").val();
         const cnpj = $("#cnpj").val();
         const senha = $("#senha2").val();
-        const body = { nome, telefone, email, cnpj, senha };
+        const alerta_produto = 1
+        const recebe_email = 1
+        const body = { nome, telefone, email, cnpj, senha, alerta_produto, recebe_email};
 
     try {
         const response = await $.ajax({
@@ -109,6 +111,7 @@
                 timer: 1500
             }).then(()=>{
                 window.location.reload();
+
             })
             
         } else {

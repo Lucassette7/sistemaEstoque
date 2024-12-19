@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <%-include('partials/header')%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações do Sistema</title>
+    <link rel="stylesheet" href="configuracao.css">
+
+    <body>
+        <%- include('partials/barraLateral') %>
+        <div class="container">
+            <div class="card">
+                <h1>Configurações do Sistema</h1>
+                
+                <!-- Seção de Ajustes -->
+                <div class="section">
+                    <h2>Ajustes Gerais</h2>
+                    <label for="lang">Idioma:</label>
+                    <select id="lang" name="lang">
+                        <option value="pt-br">Português (Brasil)</option>
+                        <option value="en-us">Inglês (Estados Unidos)</option>
+                        
+                    </select>
+    
+                    <label for="theme">Tema:</label>
+                    <select id="theme" name="theme">
+                        <option value="light">Claro</option>
+                        <option value="dark">Escuro</option>
+                    </select>
+                </div>
+    
+                <!-- Seção de Notificações -->
+                <div class="section">
+                    <h2>Notificações</h2>
+                    <label for="email-notifications">Notificações por E-mail:</label>
+                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+    
+                    <label for="sms-notifications">Notificações por SMS:</label>
+                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+
+                    <label for="alertaProduto">Alerta falta de produto</label>
+                    <input id="alerta" class="form-check-input mt-0" type="checkbox" value="0" aria-label="Checkbox for following text input">
+                </div>
+    
+                <!-- Seção de Preferências de Conta -->
+                <div class="section">
+                    <h2>Preferências de Conta</h2>
+
+                    <label for="username">Nome de Usuário:</label>
+                    <input type="text" id="username" name="username" value="usuario123">
+    
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" value="usuario@exemplo.com">
+                </div>
+    
+                <!-- Botões de Ação -->
+                
+                <center><button type="button" class="btn btn-primary" onclick="salvaMudancas()">Salvar Alterações</button></center>
+                
+            </div>
+        </div>
+    </body>
+
+<script>
+
+
+
+
+function salvaMudancas(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    const alerta = document.getElementById('alerta');
+    let valor = ''
+    if(alerta.checked){
+        valor = 1
+    }
+    else{
+        valor = 0
+    }
+    $.ajax({
+        url: `/salvaMudancas/${valor}/${id_empresa}`,
+        method: 'PUT',
+        contentType: 'application/json'
+    }).done((response)=>{
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                title: 'Preferencias atualizadas',
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao atualizar preferencias',
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    })
+}
+
+//verifica alerta paradeixar o check no checkbox
+function verificaAlerta(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    $.ajax({
+        url: `/verificaAlertaBotao/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response)=>{
+        if(response){
+            const valor = response[0].alerta_produto
+            if(valor == 1){
+                document.getElementById('alerta').checked = true
+            }
+        }
+    })
+}
+
+$(document).ready(function(){
+    verificaAlerta()
+})
+
+</script>
+    
+</html>

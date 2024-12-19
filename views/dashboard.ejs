@@ -345,10 +345,11 @@ $(document).ready(function(){
                     <button class="btn btn-info btn-sm" onclick="editar(${data.id_produto})"><i class="ri-pencil-line"></i></button>&nbsp;
                     `
                 }
-            }
+            },
         ]
     })
 })
+
 
 // Verifica a cada 2 segundos
 setInterval(() => {
@@ -431,11 +432,48 @@ function produtoFalta(){
     })
 }
 
+async function alertaQuantidade(){
+    const id_empresa = sessionStorage.getItem('id_empresa');
+    $.ajax({
+        url: `/verificaAlerta/${id_empresa}`,
+        method: 'GET',
+        contentType: 'application/json'
+    }).done((response)=>{
+        const valor = response[0].alerta_produto
+        if(valor == 1){
+            $.ajax({
+                url: `/alertaQuantidade/${id_empresa}`,
+                method: 'GET',
+                contentType: 'application/json'
+            }).done(async (response) => {
+                    if (response) {
+                            for (let produtos of response) { // ele percorre cada produto do array para ver se é menor que 100 se for aciona o swal para cada produto que estiver abaixo da qauntiade 
+                            const quantidade = produtos.quantidade;
+                            const produto = produtos.produto;
+
+                        if (quantidade < 100) {
+                        // Espera o Swal.fire fechar antes de continuar para o próximo
+                            await Swal.fire({
+                                icon: 'warning',
+                                position: 'top-end',
+                                title: `O produto ${produto} está com apenas ${quantidade} em estoque`,
+                                showConfirmButton: true
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    })
+}
+
+
 $(document).ready(function(){
     graficoBarra();
     graficoMinimo();
     totalProduto();
-    produtoFalta()
+    produtoFalta();
+    alertaQuantidade()
 })
     </script>
 </body>

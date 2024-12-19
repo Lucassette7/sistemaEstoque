@@ -1,0 +1,132 @@
+/* Resetando margens e padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra lateral (parte fixa) */
+barraLateral {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin-left: 250px; /* Deixa o conteúdo da página com margem esquerda suficiente para não sobrepor a barra lateral */
+    width: calc(100% - 250px); /* Faz o container ocupar o restante da tela */
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Estilo do card */
+.card {
+    background-color: white;
+    border-radius: 12px; /* Borda arredondada para um visual mais moderno */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Deixa o card ocupar todo o espaço disponível dentro do container */
+    max-width: 700px; /* Limita o tamanho máximo do card */
+    padding: 30px;
+    box-sizing: border-box;
+    margin: 20px;
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+/* Estilos das seções */
+.section {
+    margin-bottom: 25px;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Estilo para labels e inputs */
+label {
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+/* Estilos dos checkboxes */
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+/* Estilo dos botões */
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 48%;
+}
+
+.save-btn {
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #45a049;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #e53935;
+}
+
+button:focus {
+    outline: none;
+}
