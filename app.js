@@ -60,6 +60,10 @@ app.use(saida)
 const configuracao = require('./routes/configuracao')
 app.use(configuracao)
 
+//cadastroUsuario
+const cadastroUsuario = require('./routes/cadastroUsuario')
+app.use('/', cadastroUsuario)
+
 
 
 

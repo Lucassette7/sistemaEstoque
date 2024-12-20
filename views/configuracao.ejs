@@ -121,8 +121,16 @@ function verificaAlerta(){
     })
 }
 
+function verificaSession(){
+    const id_empresa = sessionStorage.getItem('id_empresa')
+    if(!id_empresa){
+        window.location.href = '/'
+    }
+}
+
 $(document).ready(function(){
     verificaAlerta()
+    verificaSession()
 })
 
 </script>

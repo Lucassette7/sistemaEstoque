@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../database/db')
 
-router.get('/saida', (req, res)=>{
+router.get('    ', (req, res)=>{
     res.render('saida.ejs')
 })
 

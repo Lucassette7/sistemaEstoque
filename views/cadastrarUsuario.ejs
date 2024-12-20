@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('partials/header')%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Usuario</title>
+
+<body>
+    <div id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <center><h5 class="modal-title" id="myModalLabel">Cadastro</h5></center>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 55px;">Nome</span>
+                        <input type="text" id="nome" placeholder="Digite o nome da empresa" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text " id="inputGroup-sizing-sm" style="width: 55px;">Fone</span>
+                        <input type="text" id="telefone" placeholder="Digite o telefone com prefixo" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 55px;">Email</span>
+                        <input type="email" id="email2" placeholder="Digite o email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 55px;">Cnpj</span>
+                        <input type="text" id="cnpj" placeholder="Digite o cnpj" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" maxlength="14">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 55px;">Senha</span>
+                        <input type="password" id="senha2" placeholder="Cadastre uma senha" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="voltar()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="button" onclick="cadastrar()" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    async function cadastrar() {
+        const nome = $("#nome").val();
+        const telefone = $("#telefone").val();
+        const email = $("#email2").val();
+        const cnpj = $("#cnpj").val();
+        const senha = $("#senha2").val();
+        const alerta_produto = 1
+        const recebe_email = 1
+        const body = { nome, telefone, email, cnpj, senha, alerta_produto, recebe_email};
+
+    try {
+        const response = await $.ajax({
+            url: '/salvarCadastro',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+        });
+
+        if (response.success) {
+            Swal.fire({
+                icon: 'success',
+                position: 'top-end',
+                title: 'Cadastrado com sucesso',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(()=>{
+                window.location.reload();
+
+            })
+            
+        } else {
+            Swal.fire({
+                icon: 'error',
+                position: 'top-end',
+                title: 'Erro ao cadastrar',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    } catch (erro) {
+        console.error('Erro na requisição:', erro);
+        Swal.fire({
+            icon: 'error',
+            position: 'top-end',
+            title: 'Erro ao tentar cadastrar. Tente novamente.',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+}
+
+function voltar(){
+    window.location.href = '/'
+}
+</script>
+</body>
+</html>
